@@ -10,7 +10,8 @@ public class CriaEntidades {
     public CriaEntidades(Connection con) throws SQLException {
         String endereco = "" +
                 "CREATE TABLE `endereco` (\n" +
-                "  `id` bigint auto_increment,\n" +
+                "  `id` " +
+                ",\n" +
                 "  `descricao` varchar(200),\n" +
                 "  `logradouro` varchar(200),\n" +
                 "  PRIMARY KEY (`id`)\n" +

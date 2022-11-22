@@ -76,7 +76,6 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
         Iterator<Integer> interetor = ids.iterator();
         while(interetor.hasNext()){
             lista.add(interetor.next());
-
         }
         String sqlIN = lista.stream()
                 .map(x -> String.valueOf(x))
@@ -86,7 +85,11 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
         List<Endereco> resultado = new ArrayList();
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                resultado.add(new Endereco(rs.getInt(1),rs.getString(2), LogradouroEnum.valueOf(rs.getString(3))));
+                int id = rs.getInt(1);
+                String descricao = rs.getString(2);
+                LogradouroEnum logEnum = LogradouroEnum.valueOf(rs.getString(3));
+                Endereco endereco = new Endereco(id, descricao, logEnum);
+                resultado.add(endereco);
             }
         }
         return resultado;
