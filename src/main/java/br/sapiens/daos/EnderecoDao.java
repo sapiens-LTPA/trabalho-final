@@ -72,15 +72,18 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
 
     @Override
     public List<Endereco> findAllById(Iterable<Integer> ids) throws SQLException {
-        List<Integer> lista = new ArrayList();
-        Iterator<Integer> interetor = ids.iterator();
-        while(interetor.hasNext()){
-            lista.add(interetor.next());
+        String sql = "select * from endereco ";
+        if(ids != null) {
+            List<Integer> lista = new ArrayList();
+            Iterator<Integer> interetor = ids.iterator();
+            while(interetor.hasNext()){
+                lista.add(interetor.next());
+            }
+            String sqlIN = lista.stream()
+                    .map(x -> String.valueOf(x))
+                    .collect(Collectors.joining(",", "(", ")"));
+            sql = sql+" where id in(?)".replace("(?)", sqlIN);
         }
-        String sqlIN = lista.stream()
-                .map(x -> String.valueOf(x))
-                .collect(Collectors.joining(",", "(", ")"));
-        String sql = "select * from endereco where id in(?)".replace("(?)", sqlIN);
         PreparedStatement stmt = conn.prepareStatement(sql);
         List<Endereco> resultado = new ArrayList();
         try (ResultSet rs = stmt.executeQuery()) {
@@ -110,5 +113,9 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
     @Override
     public void deleteAll(Iterable<? extends Endereco> entities) {
 
+    }
+
+    public List<Endereco> findAll() throws SQLException {
+        return findAllById(null);
     }
 }

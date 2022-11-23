@@ -15,9 +15,14 @@ public class MainController {
 
     public BorderPane pane;
     public void cadastrarEndereco() throws IOException {
-        System.out.println("funcionou");
         FXMLLoader fxmlLoader =
                 new FXMLLoader(Main.class.getResource("/endereco/cadastro.fxml"));
+        pane.setCenter(fxmlLoader.load());
+    }
+
+    public void listaEndereco() throws IOException {
+        FXMLLoader fxmlLoader =
+                new FXMLLoader(Main.class.getResource("/endereco/listaEndereco.fxml"));
         pane.setCenter(fxmlLoader.load());
     }
     public void initialize() throws IOException {
