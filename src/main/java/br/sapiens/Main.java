@@ -1,6 +1,8 @@
 package br.sapiens;
 
 
+import br.sapiens.configs.ConexaoSingleton;
+import br.sapiens.configs.CriaEntidades;
 import br.sapiens.models.Endereco;
 import br.sapiens.models.LogradouroEnum;
 import javafx.application.Application;
@@ -10,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 public class Main extends Application {
@@ -18,14 +21,14 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader =
                 new FXMLLoader(Main.class.getResource("/layout/main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Index");
         stage.setScene(scene);
         stage.show();
     }
 
-    public static void main(String[] args) {
-        //minha conecao
+    public static void main(String[] args) throws SQLException {
+        new CriaEntidades(new ConexaoSingleton().getConnection());
         launch();
     }
 
