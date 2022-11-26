@@ -8,8 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -17,6 +15,8 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class EnderecoController {
@@ -33,6 +33,9 @@ public class EnderecoController {
 
     @FXML
     Pane painelVinculo;
+
+    @FXML
+    DatePicker dataJf;
 
     public EnderecoController() throws SQLException {
     }
@@ -98,7 +101,8 @@ public class EnderecoController {
         Integer idInt = null;
         if(!id.isEmpty())
             idInt = Integer.valueOf(id);
-        Endereco retorno = dao.save(new Endereco(idInt, descricao.getText(), (LogradouroEnum) logradouro.getValue()));
+        LocalDate localDate = dataJf.getValue();
+        Endereco retorno = dao.save(new Endereco(idInt, descricao.getText(), (LogradouroEnum) logradouro.getValue(), new Date()));
         this.id.setText(retorno.getId().toString());
     }
 }

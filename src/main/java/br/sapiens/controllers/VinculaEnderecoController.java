@@ -1,7 +1,6 @@
 package br.sapiens.controllers;
 
 import br.sapiens.models.Endereco;
-import br.sapiens.models.LogradouroEnum;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

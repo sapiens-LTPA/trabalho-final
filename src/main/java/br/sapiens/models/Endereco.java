@@ -1,5 +1,7 @@
 package br.sapiens.models;
 
+import java.util.Date;
+
 public class Endereco {
 
 
@@ -8,10 +10,16 @@ public class Endereco {
 
     private Integer id;
 
-    public Endereco(Integer id, String descricao, LogradouroEnum logradouro) {
+    private Date data;
+
+    public Endereco(Integer id, String descricao, LogradouroEnum logradouro, Date data) {
+        //java.util.Date --> Modelo esta usando essa data
+        //sql.Date -> banco de dados usa essa data
+        //java.time.LocalDate -> JavaFx
         this.id = id;
         this.descricao = descricao;
         this.logradouro = logradouro;
+        this.data = data;
     }
 
     public Integer getId() {
@@ -36,5 +44,13 @@ public class Endereco {
 
     public void setLogradouro(LogradouroEnum logradouro) {
         this.logradouro = logradouro;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 }

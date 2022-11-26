@@ -6,6 +6,7 @@ import br.sapiens.models.LogradouroEnum;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -91,7 +92,7 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
                 int id = rs.getInt(1);
                 String descricao = rs.getString(2);
                 LogradouroEnum logEnum = LogradouroEnum.valueOf(rs.getString(3));
-                Endereco endereco = new Endereco(id, descricao, logEnum);
+                Endereco endereco = new Endereco(id, descricao, logEnum, new Date());
                 resultado.add(endereco);
             }
         }
