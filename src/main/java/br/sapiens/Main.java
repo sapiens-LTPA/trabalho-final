@@ -3,17 +3,13 @@ package br.sapiens;
 
 import br.sapiens.configs.ConexaoSingleton;
 import br.sapiens.configs.CriaEntidades;
-import br.sapiens.models.Endereco;
-import br.sapiens.models.LogradouroEnum;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class Main extends Application {
 

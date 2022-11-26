@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -38,16 +39,43 @@ public class EnderecoController {
             list.addAll(LogradouroEnum.values());
             logradouro.setItems(list);
         }
-
-        if(table != null){ // estou na tela de listagem
+        if(table != null){
             TableColumn<Endereco, String> idC = new TableColumn("Id");
             idC.setCellValueFactory(new PropertyValueFactory("id"));
             TableColumn<Endereco, String> logradouroC = new TableColumn("Logradouro");
             logradouroC.setCellValueFactory(new PropertyValueFactory("logradouro"));
             TableColumn<Endereco, String> descricaoC = new TableColumn("Descricao");
             descricaoC.setCellValueFactory(new PropertyValueFactory("descricao"));
-//            new TableColumn<Endereco,String>("Ação");
-            table.getColumns().addAll(List.of(idC,logradouroC,descricaoC));
+
+            TableColumn action = new TableColumn("Ação");
+
+            Callback<TableColumn<Endereco, String>, TableCell<Endereco, String>> fabrica =
+                    new Callback<TableColumn<Endereco, String>, TableCell<Endereco, String>>() {
+                        @Override
+                        public TableCell call(final TableColumn<Endereco, String> param) {
+                            final TableCell<Endereco, String> cell = new TableCell<Endereco, String>() {
+                                @Override
+                                public void updateItem(String item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    setGraphic(null);
+                                    setText(null);
+                                    if (!empty) {
+                                        Button btn = new Button("Vincular");
+                                        btn.setOnAction(event -> {
+                                            Endereco endereco = this.getTableRow().getItem();
+                                            System.out.println("nome endereço "+endereco.getDescricao());
+                                        });
+                                        setGraphic(btn);
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    };
+
+            action.setCellFactory(fabrica);
+
+            table.getColumns().addAll(List.of(idC,logradouroC,descricaoC,action));
             table.getItems().addAll(dao.findAll());
         }
 

@@ -16,8 +16,19 @@ public class CriaEntidades {
                 "  PRIMARY KEY (`id`)\n" +
                 ");\n";
 
+        String matricula = "CREATE TABLE `Matricula` (\n" +
+                " disciplina int, \n " +
+                " aluno int, \n " +
+                " periodo  varchar(200),\n " +
+                " PRIMARY KEY (periodo, disciplina, aluno) \n" +
+
+                ");\n";
+
+
         Statement statement = con.createStatement();
         statement.execute(endereco);
+        statement.execute(matricula);
+        System.out.println("Tabela matricula criada com sucesso. ");
         statement.close();
     }
 
