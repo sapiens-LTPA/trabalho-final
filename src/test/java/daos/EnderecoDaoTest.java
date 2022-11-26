@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -29,19 +31,26 @@ public class EnderecoDaoTest {
 
 
     @Test
-    public void save() throws SQLException {
-        Endereco endereco = new Endereco(null,"Descrição", LogradouroEnum.Rua, new Date());
+    public void save() throws SQLException, ParseException {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2000");
+
+        Endereco endereco = new Endereco(null,"Descrição", LogradouroEnum.Rua, date);
         Endereco enderecoSalvo = enderecoDao.save(endereco);
         Assert.assertTrue(enderecoSalvo.getId() != null);
+        Assert.assertTrue(enderecoSalvo.getData().getTime() == 946699200000l);
     }
 
 
     @Test
-    public void saveAll() throws SQLException {
-        Endereco endereco1 = new Endereco(null,"Descrição - 1", LogradouroEnum.Rua, new Date());
-        Endereco endereco2 = new Endereco(null,"Descrição - 2", LogradouroEnum.Rua, new Date());
+    public void saveAll() throws SQLException, ParseException {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2000");
+        Endereco endereco1 = new Endereco(null,"Descrição - 1", LogradouroEnum.Rua, date);
+        Endereco endereco2 = new Endereco(null,"Descrição - 2", LogradouroEnum.Rua, date);
         Iterable<Endereco> enderecoSalvo = enderecoDao.saveAll(List.of(endereco1, endereco2));
-        enderecoSalvo.forEach(it -> Assert.assertTrue(it.getId() != null));
+        enderecoSalvo.forEach(it -> {
+            Assert.assertTrue(it.getId() != null);
+            Assert.assertTrue(it.getData().getTime() == 946699200000l);
+        });
     }
 
     @Test

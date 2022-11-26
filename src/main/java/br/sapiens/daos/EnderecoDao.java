@@ -1,6 +1,7 @@
 package br.sapiens.daos;
 
 import br.sapiens.configs.ConexaoSingleton;
+import br.sapiens.models.DateParse;
 import br.sapiens.models.Endereco;
 import br.sapiens.models.LogradouroEnum;
 
@@ -30,21 +31,24 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
     }
 
     private <S extends Endereco> S update(S entity) throws SQLException {
-        String sql = "UPDATE endereco SET descricao = ?, logradouro = ? WHERE id = ?";
+        String sql = "UPDATE endereco SET descricao = ?, logradouro = ?, data = ? WHERE id = ?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1,entity.getDescricao());
         pstmt.setString(2,entity.getLogradouro().toString());
-        pstmt.setString(3,entity.getId().toString());
+        pstmt.setDate(3, new DateParse().parse(entity.getData()));
+        pstmt.setString(4,entity.getId().toString());
+
         pstmt.executeUpdate();
         return entity;
     }
 
     private <S extends Endereco> S insertInto(S entity) throws SQLException {
-        String sql = "Insert into endereco(descricao, logradouro) values(?, ?)";
+        String sql = "Insert into endereco(descricao, logradouro, data) values(?, ?, ?)";
         PreparedStatement pstmt = conn.prepareStatement(sql,
                 Statement.RETURN_GENERATED_KEYS);
         pstmt.setString(1,entity.getDescricao());
         pstmt.setString(2,entity.getLogradouro().toString());
+        pstmt.setDate(3, new DateParse().parse(entity.getData()));
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows == 0)
             throw new SQLException("Falha, nenhuma linha foi inserida");
@@ -92,7 +96,8 @@ public class EnderecoDao implements CrudRepository<Endereco,Integer> {
                 int id = rs.getInt(1);
                 String descricao = rs.getString(2);
                 LogradouroEnum logEnum = LogradouroEnum.valueOf(rs.getString(3));
-                Endereco endereco = new Endereco(id, descricao, logEnum, new Date());
+                java.sql.Date date = rs.getDate(4);
+                Endereco endereco = new Endereco(id, descricao, logEnum, date);
                 resultado.add(endereco);
             }
         }

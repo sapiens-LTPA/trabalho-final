@@ -13,6 +13,7 @@ public class CriaEntidades {
                 "  `id` bigint auto_increment,\n" +
                 "  `descricao` varchar(200),\n" +
                 "  `logradouro` varchar(200),\n" +
+                "  `data` date,\n" +
                 "  PRIMARY KEY (`id`)\n" +
                 ");\n";
 
@@ -21,7 +22,6 @@ public class CriaEntidades {
                 " aluno int, \n " +
                 " periodo  varchar(200),\n " +
                 " PRIMARY KEY (periodo, disciplina, aluno) \n" +
-
                 ");\n";
 
 
