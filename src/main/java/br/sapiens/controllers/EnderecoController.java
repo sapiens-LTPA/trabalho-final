@@ -2,6 +2,7 @@ package br.sapiens.controllers;
 
 import br.sapiens.Main;
 import br.sapiens.daos.EnderecoDao;
+import br.sapiens.models.DateParse;
 import br.sapiens.models.Endereco;
 import br.sapiens.models.LogradouroEnum;
 import javafx.collections.FXCollections;
@@ -54,9 +55,13 @@ public class EnderecoController {
             logradouroC.setCellValueFactory(new PropertyValueFactory("logradouro"));
             TableColumn<Endereco, String> descricaoC = new TableColumn("Descricao");
             descricaoC.setCellValueFactory(new PropertyValueFactory("descricao"));
+
+            TableColumn<Endereco, String> data = new TableColumn("Data");
+            data.setCellValueFactory(new PropertyValueFactory("dataFormato"));
+
             TableColumn action = new TableColumn("Ação");
             action.setCellFactory(criaAcao());
-            table.getColumns().addAll(List.of(idC,logradouroC,descricaoC,action));
+            table.getColumns().addAll(List.of(idC,logradouroC,descricaoC,data,action));
             table.getItems().addAll(dao.findAll());
         }
 
@@ -102,7 +107,8 @@ public class EnderecoController {
         if(!id.isEmpty())
             idInt = Integer.valueOf(id);
         LocalDate localDate = dataJf.getValue();
-        Endereco retorno = dao.save(new Endereco(idInt, descricao.getText(), (LogradouroEnum) logradouro.getValue(), new Date()));
+        Date date = new DateParse().parse(localDate);
+        Endereco retorno = dao.save(new Endereco(idInt, descricao.getText(), (LogradouroEnum) logradouro.getValue(),date));
         this.id.setText(retorno.getId().toString());
     }
 }

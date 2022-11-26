@@ -1,5 +1,6 @@
 package br.sapiens.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Endereco {
@@ -12,6 +13,8 @@ public class Endereco {
 
     private Date data;
 
+    String dataFormato = "";
+
     public Endereco(Integer id, String descricao, LogradouroEnum logradouro, Date data) {
         //java.util.Date --> Modelo esta usando essa data
         //sql.Date -> banco de dados usa essa data
@@ -20,6 +23,8 @@ public class Endereco {
         this.descricao = descricao;
         this.logradouro = logradouro;
         this.data = data;
+        if(data != null)
+            dataFormato = new SimpleDateFormat("dd/MM/yyyy").format(data);
     }
 
     public Integer getId() {
@@ -47,10 +52,20 @@ public class Endereco {
     }
 
     public Date getData() {
+        if(data != null)
+            dataFormato = new SimpleDateFormat("dd/MM/yyyy").format(data);
         return data;
     }
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public String getDataFormato() {
+        return dataFormato;
+    }
+
+    public void setDataFormato(String dataFormato) {
+        this.dataFormato = dataFormato;
     }
 }

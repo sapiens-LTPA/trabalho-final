@@ -33,11 +33,10 @@ public class EnderecoDaoTest {
     @Test
     public void save() throws SQLException, ParseException {
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2000");
-
         Endereco endereco = new Endereco(null,"Descrição", LogradouroEnum.Rua, date);
         Endereco enderecoSalvo = enderecoDao.save(endereco);
         Assert.assertTrue(enderecoSalvo.getId() != null);
-        Assert.assertTrue(enderecoSalvo.getData().getTime() == 946699200000l);
+        Assert.assertTrue(enderecoSalvo.getData().getTime() == date.getTime());
     }
 
 
@@ -49,7 +48,7 @@ public class EnderecoDaoTest {
         Iterable<Endereco> enderecoSalvo = enderecoDao.saveAll(List.of(endereco1, endereco2));
         enderecoSalvo.forEach(it -> {
             Assert.assertTrue(it.getId() != null);
-            Assert.assertTrue(it.getData().getTime() == 946699200000l);
+            Assert.assertTrue(it.getData().getTime() == date.getTime());
         });
     }
 
