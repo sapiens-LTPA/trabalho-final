@@ -18,6 +18,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader =
                 new FXMLLoader(Main.class.getResource("/layout/main.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        stage.setMaximized(true);
         stage.setTitle("Index");
         stage.setScene(scene);
         stage.show();

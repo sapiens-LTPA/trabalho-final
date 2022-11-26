@@ -8,9 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -29,6 +31,9 @@ public class EnderecoController {
     @FXML
     TableView table;
 
+    @FXML
+    Pane painelVinculo;
+
     public EnderecoController() throws SQLException {
     }
 
@@ -46,40 +51,48 @@ public class EnderecoController {
             logradouroC.setCellValueFactory(new PropertyValueFactory("logradouro"));
             TableColumn<Endereco, String> descricaoC = new TableColumn("Descricao");
             descricaoC.setCellValueFactory(new PropertyValueFactory("descricao"));
-
             TableColumn action = new TableColumn("Ação");
-
-            Callback<TableColumn<Endereco, String>, TableCell<Endereco, String>> fabrica =
-                    new Callback<TableColumn<Endereco, String>, TableCell<Endereco, String>>() {
-                        @Override
-                        public TableCell call(final TableColumn<Endereco, String> param) {
-                            final TableCell<Endereco, String> cell = new TableCell<Endereco, String>() {
-                                @Override
-                                public void updateItem(String item, boolean empty) {
-                                    super.updateItem(item, empty);
-                                    setGraphic(null);
-                                    setText(null);
-                                    if (!empty) {
-                                        Button btn = new Button("Vincular");
-                                        btn.setOnAction(event -> {
-                                            Endereco endereco = this.getTableRow().getItem();
-                                            System.out.println("nome endereço "+endereco.getDescricao());
-                                        });
-                                        setGraphic(btn);
-                                    }
-                                }
-                            };
-                            return cell;
-                        }
-                    };
-
-            action.setCellFactory(fabrica);
-
+            action.setCellFactory(criaAcao());
             table.getColumns().addAll(List.of(idC,logradouroC,descricaoC,action));
             table.getItems().addAll(dao.findAll());
         }
 
     }
+
+    private Callback<TableColumn<Endereco, String>, TableCell<Endereco, String>> criaAcao() {
+       return
+                new Callback<TableColumn<Endereco, String>, TableCell<Endereco, String>>() {
+                    @Override
+                    public TableCell call(final TableColumn<Endereco, String> param) {
+                        final TableCell<Endereco, String> cell = new TableCell<Endereco, String>() {
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                setGraphic(null);
+                                setText(null);
+                                if (!empty) {
+                                    Button btn = new Button("Vincular");
+                                    btn.setOnAction(event -> {
+                                        FXMLLoader fxmlLoader =
+                                                new FXMLLoader(Main.class.getResource("/endereco/vinculo.fxml"));
+                                        try {
+                                            painelVinculo.getChildren().add(fxmlLoader.load());
+                                            VinculaEnderecoController controller = fxmlLoader.getController();
+                                            Endereco endereco = this.getTableRow().getItem();
+                                            controller.recebeEndereco(endereco);
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    });
+                                    setGraphic(btn);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                };
+    }
+
     public void salvar() throws SQLException {
         String id = this.id.getText();
         Integer idInt = null;
